@@ -2,23 +2,34 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Mayers BSD – Sviluppatore</title>
+  <title>Generatore Password – Alessandro Garuti</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>Mayers BSD</h1>
-    <p>Sviluppatore JavaScript & Node.js</p>
+    <h1>Generatore di Password Sicure</h1>
+    <p>Creato da Alessandro Garuti</p>
   </header>
 
   <main>
-    <button id="btnClicca">Cliccami!</button>
-    <p id="risultato"></p>
+    <label for="length">Lunghezza: <span id="valoreLunghezza">12</span></label>
+    <input type="range" id="length" min="6" max="32" value="12" />
+
+    <div>
+      <label><input type="checkbox" id="uppercase" checked> Lettere maiuscole</label><br>
+      <label><input type="checkbox" id="numbers" checked> Numeri</label><br>
+      <label><input type="checkbox" id="symbols"> Simboli</label>
+    </div>
+
+    <button id="genera">Genera password</button>
+    <input type="text" id="output" readonly>
+
+    <p id="copiato" style="display:none;">✅ Copiata negli appunti!</p>
   </main>
 
   <footer>
-    <p>© 2025 Mayers BSD</p>
+    <p>© 2025 Alessandro Garuti</p>
   </footer>
 
   <script src="script.js"></script>
