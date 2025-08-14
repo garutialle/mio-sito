@@ -99,3 +99,45 @@ input[type="range"] {
   color: var(--fg);
   cursor: pointer;
 }
+
+/* Pulsanti moderni */
+button {
+  padding: 0.6rem 1.2rem;
+  margin: 0.3rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background: linear-gradient(to right, var(--primary), var(--accent));
+  color: white;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease;
+}
+button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(to right, var(--accent), var(--primary));
+}
+
+/* Responsive layout per dispositivi mobili */
+@media screen and (max-width: 600px) {
+  section {
+    padding: 1rem;
+    width: 95%;
+    font-size: 0.95rem;
+  }
+  nav button {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+  input[type="text"] {
+    width: 95%;
+    font-size: 1rem;
+  }
+  .slider-wrapper {
+    width: 95%;
+  }
+  h1 {
+    font-size: 1.5rem;
+  }
+}
