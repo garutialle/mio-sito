@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
-      --bg: #ffffff;
-      --fg: #000000;
+      --bg: #fff;
+      --fg: #000;
       --primary: #007acc;
       --accent: #00c853;
       --input-bg: #f0f0f0;
@@ -22,78 +22,49 @@
       --border: #555;
     }
     body {
-      margin: 0;
-      font-family: sans-serif;
-      background-color: var(--bg);
+      background: var(--bg);
       color: var(--fg);
-      transition: background 0.3s, color 0.3s;
+      font-family: sans-serif;
+      margin: 0;
+      transition: all 0.3s ease;
     }
-    header, footer {
-      text-align: center;
-      padding: 1rem;
-      background: var(--input-bg);
-      border-bottom: 1px solid var(--border);
-    }
-    nav {
+    nav, header, footer {
       text-align: center;
       padding: 1rem;
     }
     nav button {
-      margin: 0 10px;
-      padding: 10px 20px;
-      font-size: 1rem;
+      margin: 0.2rem;
+      padding: 0.5rem 1rem;
       background: var(--primary);
+      color: white;
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      color: white;
     }
     nav button.active {
       background: var(--accent);
     }
-    main {
-      padding: 2rem;
-      text-align: center;
-    }
-    section {
-      display: none;
-    }
-    section.active {
-      display: block;
-    }
-    input[type="range"], input[type="text"] {
+    section { display: none; padding: 2rem; text-align: center; }
+    section.active { display: block; }
+    input[type="text"], input[type="range"] {
       width: 80%;
-      font-size: 1rem;
       padding: 0.5rem;
+      font-size: 1rem;
       margin-top: 1rem;
-      background: var(--input-bg);
       border: 2px solid var(--border);
+      border-radius: 5px;
+      background: var(--input-bg);
       color: var(--fg);
-      border-radius: 4px;
-      text-align: center;
-    }
-    input[type="checkbox"] {
-      margin-right: 0.5rem;
-    }
-    #copiato {
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
-      color: var(--accent);
-      opacity: 0;
-      transition: opacity 0.4s ease-in-out;
-    }
-    #copiato.visibile {
-      opacity: 1;
     }
     .theme-toggle {
       position: absolute;
       top: 10px;
       right: 10px;
+      font-size: 1.5rem;
       background: none;
       border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
       color: var(--fg);
+      cursor: pointer;
     }
   </style>
 </head>
@@ -108,70 +79,85 @@
   <main>
     <section id="password" class="active">
       <h2>Generatore Password</h2>
-      <label for="length">Lunghezza: <span id="valoreLunghezza">12</span></label><br>
-      <input type="range" id="length" min="6" max="64" value="12" />
-      <div>
-        <label><input type="checkbox" id="uppercase" checked> Lettere maiuscole</label><br>
+      <label>Lunghezza: <span id="valoreLunghezza">12</span></label><br>
+      <input type="range" id="length" min="6" max="64" value="12"><br>
+      <div style="margin-top:1rem;">
+        <strong>Livelli:</strong><br>
+        <button onclick="setPreset('low')">🔴 Debole</button>
+        <button onclick="setPreset('secure')">🟠 Sicura</button>
+        <button onclick="setPreset('high')">🟢 Alta</button>
+      </div>
+      <div style="margin-top:1rem;">
+        <label><input type="checkbox" id="uppercase" checked> Maiuscole</label><br>
         <label><input type="checkbox" id="numbers" checked> Numeri</label><br>
         <label><input type="checkbox" id="symbols"> Simboli</label><br>
-        <label><input type="checkbox" id="noRepeat"> Evita caratteri ripetuti</label>
+        <label><input type="checkbox" id="noRepeat"> No ripetizione</label>
       </div>
-      <input type="text" id="output" readonly>
-      <p id="copiato">✅ Copiata negli appunti!</p>
+      <input type="text" id="output" readonly style="margin-top:1rem;"><br>
+      <p id="copiato">✅ Copiata!</p>
     </section>
     <section id="ip">
       <h2>Il tuo IP pubblico</h2>
-      <p>Il tuo indirizzo IP è:</p>
-      <h3 id="ipVal">Caricamento...</h3>
+      <p id="ipVal">Caricamento...</p>
     </section>
     <section id="subnet">
       <h2>Calcolatore Subnet/CIDR</h2>
-      <p>Inserisci un indirizzo IP e CIDR (es: <code>192.168.1.10/24</code>)</p>
       <input type="text" id="subnetInput" placeholder="192.168.1.10/24"><br>
       <button onclick="calcolaSubnet()">Calcola</button>
-      <div id="subnetOutput" style="margin-top: 1rem; text-align: left; max-width: 400px; margin-inline: auto;"></div>
+      <div id="subnetOutput" style="margin-top:1rem;"></div>
     </section>
   </main>
   <footer><p>© 2025 Alessandro Garuti</p></footer>
   <script>
+    function toggleTheme() {
+      const body = document.body;
+      body.dataset.theme = body.dataset.theme === "dark" ? "light" : "dark";
+    }
     document.querySelectorAll("nav button").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
-        document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
+        document.querySelectorAll("main section").forEach(sec => sec.classList.remove("active"));
         btn.classList.add("active");
         document.getElementById(btn.dataset.section).classList.add("active");
       });
     });
-    function toggleTheme() {
-      const body = document.body;
-      body.setAttribute("data-theme", body.getAttribute("data-theme") === "dark" ? "light" : "dark");
-    }
-    function generaPassword(lunghezza, opzioni) {
-      const lettere = "abcdefghijklmnopqrstuvwxyz";
-      const lettereMaiuscole = lettere.toUpperCase();
-      const numeri = "0123456789";
-      const simboli = "!@#$%^&*()_+[]{}<>?/";
-      let caratteri = lettere;
-      if (opzioni.uppercase) caratteri += lettereMaiuscole;
-      if (opzioni.numbers) caratteri += numeri;
-      if (opzioni.symbols) caratteri += simboli;
-      if (!caratteri) return "";
-      if (opzioni.noRepeat) {
-        const caratteriUnici = [...new Set(caratteri)];
-        if (caratteriUnici.length < lunghezza) return `⚠️ Max ${caratteriUnici.length} caratteri unici!`;
-        for (let i = caratteriUnici.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [caratteriUnici[i], caratteriUnici[j]] = [caratteriUnici[j], caratteriUnici[i]];
-        }
-        return caratteriUnici.slice(0, lunghezza).join('');
+    function setPreset(level) {
+      const len = document.getElementById("length");
+      const up = document.getElementById("uppercase");
+      const num = document.getElementById("numbers");
+      const sym = document.getElementById("symbols");
+      const norep = document.getElementById("noRepeat");
+      const out = document.getElementById("output");
+
+      if (level === 'low') {
+        len.value = 8; up.checked = false; num.checked = false; sym.checked = false; norep.checked = false;
+        out.style.border = "3px solid red";
+      } else if (level === 'secure') {
+        len.value = 12; up.checked = true; num.checked = true; sym.checked = false; norep.checked = false;
+        out.style.border = "3px solid orange";
       } else {
-        let password = "";
-        for (let i = 0; i < lunghezza; i++) {
-          const randIndex = Math.floor(Math.random() * caratteri.length);
-          password += caratteri[randIndex];
-        }
-        return password;
+        len.value = 20; up.checked = true; num.checked = true; sym.checked = true; norep.checked = true;
+        out.style.border = "3px solid green";
       }
+      document.getElementById("valoreLunghezza").textContent = len.value;
+      aggiornaPassword();
+    }
+    function generaPassword(l, opt) {
+      const abc = "abcdefghijklmnopqrstuvwxyz";
+      let chars = abc;
+      if (opt.uppercase) chars += abc.toUpperCase();
+      if (opt.numbers) chars += "0123456789";
+      if (opt.symbols) chars += "!@#$%^&*()[]{}<>?";
+      let out = "";
+      const used = new Set();
+      while (out.length < l) {
+        const c = chars[Math.floor(Math.random() * chars.length)];
+        if (!opt.noRepeat || !used.has(c)) {
+          out += c;
+          used.add(c);
+        }
+      }
+      return out;
     }
     function aggiornaPassword() {
       const l = parseInt(document.getElementById("length").value);
@@ -179,59 +165,40 @@
         uppercase: document.getElementById("uppercase").checked,
         numbers: document.getElementById("numbers").checked,
         symbols: document.getElementById("symbols").checked,
-        noRepeat: document.getElementById("noRepeat").checked,
+        noRepeat: document.getElementById("noRepeat").checked
       };
-      const password = generaPassword(l, o);
-      const output = document.getElementById("output");
-      output.value = password;
-      output.select();
-      document.execCommand("copy");
-      const msg = document.getElementById("copiato");
-      msg.classList.add("visibile");
-      setTimeout(() => msg.classList.remove("visibile"), 2000);
+      const p = generaPassword(l, o);
+      const out = document.getElementById("output");
+      out.value = p;
+      out.select(); document.execCommand("copy");
+      document.getElementById("copiato").style.opacity = 1;
+      setTimeout(() => document.getElementById("copiato").style.opacity = 0, 2000);
     }
     ["length", "uppercase", "numbers", "symbols", "noRepeat"].forEach(id => {
-      const el = document.getElementById(id);
-      el.addEventListener("input", aggiornaPassword);
-      el.addEventListener("change", aggiornaPassword);
-    });
-    document.getElementById("length").addEventListener("input", e => {
-      document.getElementById("valoreLunghezza").textContent = e.target.value;
+      document.getElementById(id).addEventListener("input", aggiornaPassword);
     });
     aggiornaPassword();
-    fetch('https://api.ipify.org?format=json')
+    fetch("https://api.ipify.org?format=json")
       .then(res => res.json())
       .then(data => document.getElementById("ipVal").textContent = data.ip)
-      .catch(() => document.getElementById("ipVal").textContent = "Errore nel recupero IP.");
+      .catch(() => document.getElementById("ipVal").textContent = "Errore");
     function calcolaSubnet() {
       const input = document.getElementById("subnetInput").value.trim();
-      const output = document.getElementById("subnetOutput");
-      const match = input.match(/^\s*(\d{1,3}(?:\.\d{1,3}){3})\/(\d{1,2})\s*$/);
-      if (!match) {
-        output.innerHTML = `<p style="color: red;">⚠️ Inserire IP/CIDR valido (es. 192.168.1.1/24)</p>`;
-        return;
-      }
-      const ip = match[1].split(".").map(Number);
-      const cidr = parseInt(match[2]);
-      if (ip.some(o => o < 0 || o > 255) || cidr < 0 || cidr > 32) {
-        output.innerHTML = `<p style="color: red;">⚠️ IP o CIDR non valido</p>`;
-        return;
-      }
-      const ipNum = (ip[0] << 24) | (ip[1] << 16) | (ip[2] << 8) | ip[3];
+      const match = input.match(/^(\d{1,3}(?:\.\d{1,3}){3})\/(\d{1,2})$/);
+      const out = document.getElementById("subnetOutput");
+      if (!match) return out.innerHTML = "<p>⚠️ Formato invalido</p>";
+      const ip = match[1].split(".").map(Number), cidr = +match[2];
+      if (ip.some(o => o < 0 || o > 255) || cidr > 32) return out.innerHTML = "<p>⚠️ IP/CIDR errato</p>";
+      const ipNum = ip.reduce((a,b) => (a<<8)+b);
       const mask = cidr === 0 ? 0 : 0xffffffff << (32 - cidr);
-      const net = ipNum & mask;
-      const bcast = net | (~mask >>> 0);
-      const totalHost = cidr < 31 ? (2 ** (32 - cidr) - 2) : (2 ** (32 - cidr));
-      function toIP(n) {
-        return [(n >>> 24), (n >>> 16) & 255, (n >>> 8) & 255, n & 255].join(".");
-      }
-      output.innerHTML = `
+      const net = ipNum & mask, bc = net | (~mask >>> 0);
+      const toIP = n => [(n>>24)&255,(n>>16)&255,(n>>8)&255,n&255].join(".");
+      out.innerHTML = `
         <p><strong>IP:</strong> ${toIP(ipNum)}</p>
-        <p><strong>Netmask:</strong> ${toIP(mask)} (${cidr})</p>
+        <p><strong>Netmask:</strong> ${toIP(mask)}</p>
         <p><strong>Rete:</strong> ${toIP(net)}</p>
-        <p><strong>Broadcast:</strong> ${toIP(bcast)}</p>
-        <p><strong>Host disponibili:</strong> ${totalHost}</p>
-        ${cidr < 31 ? `<p><strong>Range host:</strong> ${toIP(net + 1)} - ${toIP(bcast - 1)}</p>` : ''}
+        <p><strong>Broadcast:</strong> ${toIP(bc)}</p>
+        ${cidr < 31 ? `<p><strong>Range host:</strong> ${toIP(net+1)} – ${toIP(bc-1)}</p>` : ""}
       `;
     }
   </script>
