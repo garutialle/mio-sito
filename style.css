@@ -66,9 +66,6 @@ main {
   width: 100%;
   margin-bottom: 1rem;
 }
-input[type="text"], input[type="range"], input[type="checkbox"] {
-  margin-top: 0.5rem;
-}
 input[type="text"] {
   width: 100%;
   padding: 0.75rem;
@@ -100,20 +97,6 @@ button:hover {
   border: none;
   color: var(--fg);
   cursor: pointer;
-}
-.slider-wrapper {
-  position: relative;
-  width: 100%;
-}
-.slider-fill {
-  position: absolute;
-  top: 50%;
-  height: 6px;
-  background: var(--accent);
-  z-index: 0;
-  left: 0;
-  transform: translateY(-50%);
-  border-radius: 3px;
 }
 @media screen and (max-width: 600px) {
   .card {

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Toolbox – Password, IP & Subnet</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
@@ -39,12 +40,12 @@
       <p id="copiato">✅ Copiata!</p>
     </div>
 
-    <div class="card section" id="ip">
+    <div class="card section" id="ip" style="display:none;">
       <h2>Il tuo IP pubblico</h2>
       <p id="ipVal">Caricamento...</p>
     </div>
 
-    <div class="card section" id="subnet">
+    <div class="card section" id="subnet" style="display:none;">
       <h2>Calcolatore Subnet/CIDR</h2>
       <input type="text" id="subnetInput" placeholder="192.168.1.10/24"><br>
       <button onclick="calcolaSubnet()">Calcola</button>
