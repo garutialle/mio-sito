@@ -2,57 +2,39 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Toolbox – Password, IP & Subnet</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <title>Vem Lab</title>
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
-<body data-theme="light">
-  <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
-  <header><h1>🛡️ Password Toolbox</h1></header>
+<body>
+  <header>
+    <h1>Veam Lab</h1>
+    <p>Piccole funzioni utili in un'unica pagina</p>
+  </header>
+
   <nav>
-    <button data-section="password" class="active">🔐 Genera</button>
-    <button data-section="ip">🌍 IP Pubblico</button>
-    <button data-section="subnet">📐 Subnet</button>
+    <button onclick="showSection('ip')">Il mio IP</button>
+    <button onclick="showSection('password')">Generatore Password</button>
   </nav>
+
   <main>
-    <div class="card section active" id="password">
+    <!-- Sezione IP pubblico -->
+    <section id="ip" class="page">
+      <h2>Il tuo indirizzo IP pubblico</h2>
+      <p id="ip-value">Caricamento...</p>
+    </section>
+
+    <!-- Sezione Generatore password -->
+    <section id="password" class="page hidden">
       <h2>Generatore Password</h2>
-      <label for="length">Lunghezza: <span id="valoreLunghezza">12</span></label>
-      <div class="slider-wrapper">
-        <input type="range" id="length" min="6" max="64" value="12">
-        <div class="slider-fill" id="sliderFill"></div>
-      </div>
-      <div class="preset">
-        <strong>Livelli:</strong><br>
-        <button onclick="setPreset('low')">🔴 Debole</button>
-        <button onclick="setPreset('secure')">🟠 Sicura</button>
-        <button onclick="setPreset('high')">🟢 Alta</button>
-      </div>
-      <div class="options">
-        <label><input type="checkbox" id="uppercase" checked> Maiuscole</label><br>
-        <label><input type="checkbox" id="numbers" checked> Numeri</label><br>
-        <label><input type="checkbox" id="symbols"> Simboli</label><br>
-        <label><input type="checkbox" id="noRepeat"> No ripetizione</label>
-      </div>
-      <input type="text" id="output" readonly><br>
-      <p id="copiato">✅ Copiata!</p>
-    </div>
-
-    <div class="card section" id="ip" style="display:none;">
-      <h2>Il tuo IP pubblico</h2>
-      <p id="ipVal">Caricamento...</p>
-    </div>
-
-    <div class="card section" id="subnet" style="display:none;">
-      <h2>Calcolatore Subnet/CIDR</h2>
-      <input type="text" id="subnetInput" placeholder="192.168.1.10/24"><br>
-      <button onclick="calcolaSubnet()">Calcola</button>
-      <div id="subnetOutput"></div>
-    </div>
+      <button onclick="generatePassword()">Genera</button>
+      <p id="password-value"></p>
+    </section>
   </main>
-  <footer><p>© 2025</p></footer>
-  <script src="script.js"></script>
+
+  <footer>
+    <p>Vem Lab Pagina Web a scopo didattico</p>
+  </footer>
+
+  <script src="app.js"></script>
 </body>
 </html>
